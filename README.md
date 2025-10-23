@@ -17,7 +17,7 @@ This repository integrates **four complementary datasets**:
    - **Link:** [Zenodo](https://zenodo.org/records/11203900)  
 
 2. **Fox8-23 (2023)**  
-   - **Scale:** ~2,300 accounts (balanced bots vs humans).  
+   - **Scale:** 2,400 accounts (balanced bots vs humans).  
    - **Type:** Real, small, gold labels (verified LLM bots).  
    - **Links:** [Zenodo](https://zenodo.org/record/10066202), [GitHub](https://github.com/osome-iu/AIBot_fox8)  
 
