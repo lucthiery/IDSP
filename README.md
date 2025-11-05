@@ -2,7 +2,7 @@
 
 ## Overview
 This project explores **fake account and bot detection on social media** with a focus on **modern LLM-powered bots** (post-2023).  
-The goal is to combine **large-scale weakly labeled datasets**, **small gold-labeled datasets**, **synthetic simulations**, and **visual profile datasets** into one **multimodal detection pipeline**.
+The goal is to combine the classifications of each model from the **large-scale weakly labeled datasets**, **small gold-labeled datasets**, **synthetic simulations**, and **visual profile datasets** into a majority voting classififer. 
 
 The project is part of my **Interdisciplinary Data Science Project (IDSP)** at TU Wien.
 
