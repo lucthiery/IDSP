@@ -38,6 +38,10 @@ datasets/
 *.xlsx
 *.parquet
 
+# Exception: allow Gold.csv in data folder
+!data/Gold.csv
+
+
 # Model outputs / weights
 checkpoints/
 models/
