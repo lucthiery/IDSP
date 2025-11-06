@@ -7,9 +7,14 @@ The goal is to combine the classifications of each model from the **large-scale 
 The project is part of my **Interdisciplinary Data Science Project (IDSP)** at TU Wien.
 
 ---
+## Research
+contains all papers and research for 
 
 ## Datasets
-This repository integrates **four complementary datasets**:
+This repository integrates **four complementary datasets** + self-created Dataset:
+
+0. **Gold.CSV**
+   - manually labeled gold 2025 X/twitter user dataset
 
 1. **BotArtist (2022–23)**  
    - **Scale:** 10.9M Twitter profiles (weak labels).  
