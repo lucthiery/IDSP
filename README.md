@@ -1,65 +1,85 @@
-# Multimodal Bot Detection Project
+# Multimodal Bot Detection Project (IDSP)
 
 ## Overview
-This project explores **fake account and bot detection on social media** with a focus on **modern LLM-powered bots** (post-2023).  
-The goal is to combine the classifications of each model from the **large-scale weakly labeled datasets**, **small gold-labeled datasets**, **synthetic simulations**, and **visual profile datasets** into a majority voting classififer. 
+This project investigates the detection of **GenAI-powered botnets** on X (formerly Twitter) using a **multimodal ensemble approach**.  
+Modern Generative AI (GenAI) systems can generate convincing text, realistic images, and even video content, making automated accounts almost indistinguishable from real users.  
 
-The project is part of my **Interdisciplinary Data Science Project (IDSP)** at TU Wien.
+The goal of this project is to develop and evaluate a **stacked ensemble detection framework** that combines the predictions of multiple models — each trained on a different feature modality — into a unified classification signal.  
+The project is conducted as part of the **Interdisciplinary Data Science Project (IDSP)** at **TU Wien**.
 
 ---
+
 ## Research
-contains all papers and research for 
+All research papers and references used in the project are documented in the `/Research` folder.  
+The project is informed by current reports and academic work, including:
+
+- **OpenAI (2024)** – *Influence and Cyber Operations: An Update*  
+- **Meta Platforms (2024)** – *Quarterly Adversarial Threat Report Q1 2024*  
+- **CETaS / Alan Turing Institute (2024)** – *AI-Enabled Influence Operations: Safeguarding Future Elections*  
+- **Choi et al. (2024)** – *Analyzing Russia’s Propaganda Tactics on Twitter using Mixed-Methods Network Analysis and NLP*  
+
+These works provide empirical proof that GenAI-powered influence networks already exist and actively shape online discourse.
+
+---
 
 ## Datasets
-This repository integrates **four complementary datasets** + self-created Dataset:
+The detection pipeline integrates **four complementary datasets** plus one **self-created gold validation dataset**:
 
-0. **Gold.CSV**
-   - manually labeled gold 2025 X/twitter user dataset
-
-1. **BotArtist (2022–23)**  
-   - **Scale:** 10.9M Twitter profiles (weak labels).  
-   - **Type:** Real, large-scale, war-related.  
-   - **Link:** [Zenodo](https://zenodo.org/records/11203900)  
-
-2. **Fox8-23 (2023)**  
-   - **Scale:** 2,280 accounts (balanced bots vs humans).  
-   - **Type:** Real, small, gold labels (verified LLM bots).  
-   - **Links:** [Zenodo](https://zenodo.org/record/10066202), [GitHub](https://github.com/osome-iu/AIBot_fox8)  
-
-3. **BotSim-24 (2024)**  
-   - **Scale:** Synthetic simulation dataset.  
-   - **Type:** Synthetic, flexible, ground-truth labels.  
-   - **Links:** [Arxiv](https://arxiv.org/abs/2412.13420), [GitHub](https://github.com/QQQQQQBY/BotSim/tree/main)  
-
-4. **X Fake Profile Detection (Dracewicz & Sepczuk, 2024)**  
-   - **Scale:** 15,000 synthetic profile screenshots.  
-   - **Type:** Synthetic, image-based, gold labels.  
-   - **Link:** [Hugging Face](https://huggingface.co/datasets/drveronika/x_fake_profile_detection)  
+| ID | Dataset | Year | Type | Description |
+|----|----------|------|------|-------------|
+| 0 | **Gold.csv** | 2025 | Manual | Manually labeled, small validation dataset (≈400 accounts) for cross-model calibration. |
+| A | **BotArtist** | 2022–23 | Real / Weak Labels | ~10.9M Twitter profiles with account-level metadata and ratios; large-scale war-related collection. |
+| B | **Fox8-23** | 2023 | Real / Gold Labels | 2,280 manually verified human vs GenAI bot accounts with tweet text and basic metadata. |
+| C | **BotSim-24** | 2024 | Synthetic / Simulated | Synthetic simulation of coordinated botnet behaviors and interaction networks. |
+| D | **X Fake Profile Detection (Dracewicz & Sepczuk)** | 2024 | Synthetic / Visual | 15,000 profile screenshots labeled as Bot, Cyborg, or Human for image-based modeling. |
 
 ---
 
 ## Methodology
-The project follows **CRISP-DM** and integrates multiple methods:
+The project follows the **CRISP-DM framework** with emphasis on **reproducibility**, **multimodal modeling**, and **ensemble learning**.
 
-- **Pretraining:** on large-scale weak labels (BotArtist).  
-- **Fine-tuning:** on gold-labeled small datasets (Fox8-23).  
-- **Robustness Testing:** with simulated botnets (BotSim-24).  
-- **Multimodal Fusion:** integrating text (tweets), metadata, graph features, and images (Dracewicz dataset).  
-- **Explainability:** SHAP (tabular/text) + Grad-CAM (images).  
+### Pipeline Overview
+1. **Data Preparation:**  
+   Feature extraction, normalization, embedding generation, and outlier detection.
+2. **Model Training per Modality:**  
+   - **Metadata:** models trained on profile-level and activity-based features.  
+   - **Text:** models leveraging tweet content and linguistic representations.  
+   - **Behavior:** models analyzing temporal, coordination, and interaction patterns.  
+   - **Visual:** models based on profile and image features.
+3. **Prediction Aggregation:**  
+   Collect each model’s probability output `P(bot | modality)` across all datasets.
+4. **Meta-Ensemble / Majority Voting:**  
+   - Level 1: Majority vote of individual modality models.  
+   - Level 2: Stacked meta-classifier (meta-learner) combining base model outputs.
+5. **(Optional) Human-Labeled Validation:**  
+   Small gold dataset (`Gold.csv`) used for ensemble calibration and robustness testing.
+6. **Evaluation & Explainability:**  
+   ROC-AUC, PR-AUC, F1, and Brier Score; SHAP and Grad-CAM for interpretability.
 
 ---
 
 ## Goals
-- Develop a **multimodal detection pipeline** that scales across domains.  
-- Evaluate detection on **modern LLM-powered bots**.  
-- Provide **transparent, reproducible experiments** with bias-awareness.  
+- Build a **reproducible multimodal detection pipeline** for modern GenAI-powered bots.  
+- Evaluate **ensemble-based classification** on real, weakly labeled, and synthetic datasets.  
+- Integrate a **human-labeled gold validation set** to test ensemble calibration and interpretability.  
+- Produce **transparent, bias-aware, and well-documented** results.  
+
+---
+
+## Expected Results
+| Model | Baseline (AUC / F1) | Target (AUC / F1) |
+|--------|----------------------|--------------------|
+| Metadata Model | 0.90 / 0.88 | ≥ 0.92 / 0.90 |
+| Text Model | 0.93 / 0.90 | ≥ 0.95 / 0.92 |
+| Behavior Model | 0.88 / 0.86 | ≥ 0.91 / 0.89 |
+| Visual Model | 0.85 / 0.80 | ≥ 0.88 / 0.83 |
+| Meta-Ensemble | — | ≥ 0.96 / 0.94 |
 
 ---
 
 ## Getting Started
-Clone the repo:
 
+Clone this repository and navigate into the project directory:
 ```bash
 git clone https://github.com/lucthiery/IDSP.git
 cd IDSP
-
